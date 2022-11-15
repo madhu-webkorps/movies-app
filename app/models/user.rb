@@ -17,4 +17,6 @@ class User < ApplicationRecord
                 Rails.application.secrets.secret_key_base)
   end
 
+  has_many :movie_with_users , dependent: :destroy
+  has_many :movies, through: :movie_users
 end

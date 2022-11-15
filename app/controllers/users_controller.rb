@@ -27,6 +27,18 @@ end
     end
   end
 
+  # add movie to favourite
+ 
+ def add_favourite
+  @movie.favorited = true if @movie.favorited == false
+  @movie.fav_count += 1
+  @movie.save!
+  MovieWithUser.create(movie: @movie.id , user: @current_user_id)
+  users = MovieWithUser.where(movie_id: @movie.id).pluck(:user_id)
+  render json: {fav_count: @movie.fav_count , like_by_users: users}
+end
+  
+
   private
   def user_params
     params.require(:user).permit(:username, :email, :password, :bio, :image)
