@@ -12,4 +12,11 @@ Rails.application.routes.draw do
     end
 
   resources :users
+  resources :admin
+  resources :movies
+  resources :genres
+
+  post 'add_favourite/:id', to: "users#add_favourite"
+ get 'favorited_movies', to: "movies#favorited"
+  
 end
