@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   resources :genres
 
   post 'add_favourite/:id', to: "users#add_favourite"
- get 'favorited_movies', to: "movies#favorited"
+  get 'favorited_movies', to: "movies#favorited"
+  get 'un_favorited_movies', to: "movies#un_favorited"
+  get 'add_to_favourite' , to: "movies#add_favourite" ,as: "addfav" 
+
+  get 'fav_movies' ,to: "users#fav_movies"
   
 end

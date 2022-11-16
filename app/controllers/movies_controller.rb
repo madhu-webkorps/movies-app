@@ -1,17 +1,18 @@
 class MoviesController < ApplicationController
-   
-  before_action :set_book, only: [:show, :update, :destroy]
+   authorize_resource only: [:create , :update, :destroy, :favorited, :un_favorited]
+   before_action :set_movie, only: [:show, :update, :destroy]
 
   # list of all movies
     def index
         @movies = Movie.all
+        render json: {
+          movies: @movies
+        }
     end
 
   # create method for movie
     def create
-     
       @movie = Movie.create(movie_params)
-      debugger
       if @movie.save!
         render json: {
           movie: @movie ,
@@ -30,12 +31,12 @@ class MoviesController < ApplicationController
       fav_movies =  Movie.where(favorited: true)
       arry = []
       fav_movies.each do |f|
-          hash = {:id => f.id, :name => f.name, :favorited => f.fav_count}
-          arry.push(hash)
-       end 
+        hash = {:id => f.id, :name => f.name, :favorited => f.fav_count}
+        arry.push(hash)
+      end 
         render json: {
-                  data:arry
-        }               
+                 data: arry
+               }               
     end
 
 
@@ -64,7 +65,6 @@ class MoviesController < ApplicationController
 
     # PATCH/PUT /movies/1
     def update
-      debugger
       if @movie.update(movie_params)
         render json: { "message" => "movie updated successfully", "movie" => @movie}
       else
@@ -76,6 +76,24 @@ class MoviesController < ApplicationController
     def set_movie
       @movie = Movie.find(params[:id])
     end
+
+    # add to fav 
+    def add_favourite
+        @movie = Movie.find(params[:id])
+        users = MovieWithUser.where(movie_id: @movie.id).pluck(:user_id)
+        unless users.include?(@current_user_id) || users.count(@current_user_id) > 1
+          @movie.favorited = true if @movie.favorited == false
+          @movie.fav_count += 1
+          @movie.save!
+          
+          MovieWithUser.create(movie_id: @movie.id , user_id: @current_user_id)
+           users.blank? ? like_by_user = @current_user_id : like_by_user = users
+          render json: {fav_count: @movie.fav_count , like_by_users: like_by_user}
+        else
+          render json: { msg: "you already add this movie to your fav list"}
+        end
+    end
+      
 
     # permit params for movie
     private
