@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  # load_and_authorize_resource
   respond_to :json
   
   SECRET = Rails.application.secrets.secret_key_base
@@ -43,4 +44,11 @@ class ApplicationController < ActionController::API
     def signed_in?
       @current_user_id.present?
     end
+
+
+    
+      rescue_from CanCan::AccessDenied do |exception|
+        render json: {error:  "Access denied" , status: 403}
+      end
+   
 end
