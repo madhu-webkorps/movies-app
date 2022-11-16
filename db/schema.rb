@@ -18,11 +18,6 @@ ActiveRecord::Schema.define(version: 2022_11_15_063621) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "movie_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "movie_with_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "movie_id", null: false
@@ -38,6 +33,7 @@ ActiveRecord::Schema.define(version: 2022_11_15_063621) do
     t.string "director"
     t.string "main_star"
     t.text "discription"
+    t.integer "favourite", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "genre_id"

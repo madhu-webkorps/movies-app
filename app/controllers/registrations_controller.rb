@@ -1,7 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
     
   def create
-    debugger
         @user = User.new(sign_up_params)
         if @user.save
           token = @user.generate_jwt
