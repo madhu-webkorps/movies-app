@@ -1,7 +1,6 @@
 class AdminController < ApplicationController
     
   def index
-    debugger
     @users = User.all
     @movies = Movie.all
     @user = current_user
